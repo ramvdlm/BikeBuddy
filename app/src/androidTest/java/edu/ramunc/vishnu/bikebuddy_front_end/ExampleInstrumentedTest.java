@@ -1,4 +1,4 @@
-package com.example.ramvadlamani.bikebuddy;
+package edu.ramunc.vishnu.bikebuddy_front_end;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

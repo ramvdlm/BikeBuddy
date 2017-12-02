@@ -36,7 +36,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name="edu.ramunc.vishnu.bikebuddy_front_end.MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IncidentActivity"></activity>
+        <activity android:name="edu.ramunc.vishnu.bikebuddy_front_end.IncidentActivity"></activity>
     </application>
 
 </manifest>

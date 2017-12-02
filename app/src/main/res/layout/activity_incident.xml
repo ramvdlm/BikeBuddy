@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ramvadlamani.bikebuddy.IncidentActivity">
+    tools:context="edu.ramunc.vishnu.bikebuddy_front_end.IncidentActivity">
 
 </android.support.constraint.ConstraintLayout>

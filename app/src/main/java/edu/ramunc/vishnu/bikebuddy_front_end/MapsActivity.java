@@ -1,4 +1,4 @@
-package com.example.ramvadlamani.bikebuddy;
+package edu.ramunc.vishnu.bikebuddy_front_end;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.example.ramvadlamani.bikebuddy.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
