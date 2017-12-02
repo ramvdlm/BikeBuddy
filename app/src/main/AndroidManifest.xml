@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IncidentActivity"></activity>
+        <activity android:name=".RecordIncidentActivity"></activity>
     </application>
 
 </manifest>
