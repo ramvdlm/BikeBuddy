@@ -15,10 +15,17 @@ import retrofit2.http.POST;
 public interface ApiFunctions {
     @POST("retrieveIncident.php")
     @FormUrlEncoded
-    Call<Incident> retrieveIncident(@Field("email") String email, @Field("password") String password);
+    Call<Incident> retrieveIncident(@Field("latitude") double latitude, @Field("longitude") double longitude);
 
     @POST("recordIncident.php")
     @FormUrlEncoded
-    Call<Incident> recordIncident(@Field("email") String email, @Field("firstname") String firstname, @Field("lastname") String lastname, @Field("password") String password, @Field("gender") String gender, @Field("age") int age);
+    Call<Incident> recordIncident(@Field("latitude") double latitude, @Field("longitude") double longitude,
+                                  @Field("ambulance") Enum ambulance, @Field("biker_age") int biker_age,
+                                  @Field("bike_direction") Enum bike_direction, @Field("biker_injury") Enum biker_injury,
+                                  @Field("bike_position") Enum bike_position, @Field("biker_race") Enum biker_race,
+                                  @Field("biker_sex") Enum biker_sex , @Field("city") Enum city,
+                                  @Field("county") Enum county, @Field("day") Enum day,
+                                  @Field("location_of_crash") Enum location_of_crash, @Field("month") Enum month,
+                                  @Field("time") String time);
 
 }

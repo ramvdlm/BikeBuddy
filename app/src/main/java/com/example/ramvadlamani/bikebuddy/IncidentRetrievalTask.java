@@ -11,8 +11,13 @@ import java.io.IOException;
  */
 
 class IncidentRetrievalTask extends IncidentTask {
-    public IncidentRetrievalTask(Context c) {
+    protected final double latitude;
+    protected final double longitude;
+
+    public IncidentRetrievalTask(Context c, double longitude, double latitude) {
         super(c);
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     @Override
@@ -20,7 +25,7 @@ class IncidentRetrievalTask extends IncidentTask {
         Incident incident = null;
         try {
             // Calls the ApiFunction interface's register method and retrieves user data on successful register
-            incident = api.retrieveIncidents(mEmail, mFirstName, mLastName, mPassword, mGender, mAge).execute().body();
+            incident = api.retrieveIncident(latitude, longitude).execute().body();
         } catch (IOException e) {
             e.printStackTrace();
         }
