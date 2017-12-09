@@ -1,5 +1,7 @@
 package edu.ramunc.vishnu.bikebuddy.api;
 
+import java.util.Date;
+
 import edu.ramunc.vishnu.bikebuddy.api.pojos.Incident;
 
 import edu.ramunc.vishnu.bikebuddy.api.pojos.PositionList;
@@ -26,11 +28,6 @@ public interface ApiFunctions {
     @POST("recordIncident.php")
     @FormUrlEncoded
     Call<Incident> recordIncident(@Field("latitude") double latitude, @Field("longitude") double longitude,
-                                  @Field("ambulance") Enum ambulance, @Field("biker_age") int biker_age,
-                                  @Field("bike_direction") Enum bike_direction, @Field("biker_injury") Enum biker_injury,
-                                  @Field("bike_position") Enum bike_position, @Field("biker_race") Enum biker_race,
-                                  @Field("biker_sex") Enum biker_sex , @Field("city") Enum city,
-                                  @Field("county") Enum county, @Field("day") Enum day,
-                                  @Field("location_of_crash") Enum location_of_crash, @Field("month") Enum month,
-                                  @Field("time") String time);
+                                  @Field("crash_severity") Enum crash_severity, @Field("notes") String notes,
+                                  @Field("time") String time, @Field("date") Date date);
 }
