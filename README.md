@@ -6,4 +6,4 @@ Crowdsourcing bicycle safety in Chapel Hill, NC. Using North Carolina Department
 How to Run
 ==========
 
-Download the code, and import the project into Android Studio. Make sure to enable location services the first time you open the application, or it will not work. You will have to reinstall it! 
+Download the code, and import the project into Android Studio. Make sure to enable location services the first time you open the application, or it will not work. You will have to reinstall it! To set up the back-end, please go here: https://github.com/ramvdlm/bikebuddy-back-end. 
