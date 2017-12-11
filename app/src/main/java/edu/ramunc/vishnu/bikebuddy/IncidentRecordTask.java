@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
+import edu.ramunc.vishnu.bikebuddy.api.pojos.Incident;
+
 import java.io.IOException;
 import java.util.Date;
-
-import edu.ramunc.vishnu.bikebuddy.api.pojos.Incident;
 
 /**
  * Created by RamVadlamani on 12/2/17.
@@ -54,12 +54,12 @@ class IncidentRecordTask extends IncidentTask {
 
     @Override
     protected void onPostExecute(final Incident incident) {
-        if (incident.getCode() == 0) {
+        if (incident != null && incident.getCode() == 0) {
             // On successful response, stores credentials in SharedPreferences and continues to MapsActivity
             recordIncident(incident);
         } else {
             // Displays error
-            Toast.makeText(mContext, incident.getMessage(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(mContext, incident.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 }

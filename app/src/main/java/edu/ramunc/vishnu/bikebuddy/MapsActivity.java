@@ -11,6 +11,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -40,6 +43,8 @@ import org.json.*;
 import edu.ramunc.vishnu.bikebuddy.api.ApiFunctions;
 import edu.ramunc.vishnu.bikebuddy.api.pojos.Incident;
 
+import static edu.ramunc.vishnu.bikebuddy.R.id.map;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -53,7 +58,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationRequest mLocationRequest;
     private SensorManager sm;
     private Sensor accelerometer;
+    private Sensor light;
     long lastPrinted = 0;
+    int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         log_button.setOnClickListener(new View.OnClickListener() {
             LocationManager locman = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-            Location location = locman .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location = locman.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RecordIncidentActivity.class);
                 intent.putExtra("latitute", location.getLatitude());
@@ -79,18 +86,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
 
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        light = sm.getDefaultSensor(Sensor.TYPE_LIGHT);
         sm.registerListener(this, accelerometer, 1000000);
+        sm.registerListener(this, light, 1000000);
     }
 
     protected void onStart() {
         super.onStart();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Approaching dangerous road!").setTitle("Caution!").create().show();
     }
 
 
@@ -162,37 +169,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         IncidentTask mAuthTask = new IncidentRetrievalTask(this, location.getLatitude(), location.getLongitude());
         mAuthTask.execute((Void) null);
+        Log.v("count value", Integer.toString(count));
+        if (count >= 3){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Approaching dangerous road!").setTitle("Caution!").create().show();
+        }
 
-        //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-        LatLng latLng4 = new LatLng(35.909322, -79.058083);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng4);
-        markerOptions.title("4");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        mCurrLocationMarker = mMap.addMarker(markerOptions);
-
-        LatLng latLng1 = new LatLng(35.911919, -79.059212);
-        MarkerOptions markerOptions1 = new MarkerOptions();
-        markerOptions1.position(latLng1);
-        markerOptions1.title("1");
-        markerOptions1.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        mCurrLocationMarker = mMap.addMarker(markerOptions1);
-
-        LatLng latLng2 = new LatLng(35.912219, -79.058160);
-        MarkerOptions markerOptions2 = new MarkerOptions();
-        markerOptions2.position(latLng2);
-        markerOptions2.title("2");
-        markerOptions2.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        mCurrLocationMarker = mMap.addMarker(markerOptions2);
-
-        LatLng latLng3 = new LatLng(35.912077, -79.058842);
-        MarkerOptions markerOptions3 = new MarkerOptions();
-        markerOptions3.position(latLng3);
-        markerOptions3.title("3");
-        markerOptions3.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-        mCurrLocationMarker = mMap.addMarker(markerOptions3);
 
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -285,9 +269,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     event.values[1] * event.values[1] +
                     event.values[2] * event.values[2]);
 
-            Log.v("Accel values", Float.toString(val));
+            //Log.v("Accel values", Float.toString(val));
 
-            if(val >= 50){
+            if(val >= 75){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Would you like to log this?").setTitle("Incident Detected!");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -300,6 +284,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 builder.create().show();
             }
 
+        }
+        if(event.timestamp - lastPrinted >= 1e8 && event.sensor.getType() == Sensor.TYPE_LIGHT && count >= 3) {
+
+            float val = event.values[0];
+
+            if(val < .5){
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
+            }
         }
     }
 

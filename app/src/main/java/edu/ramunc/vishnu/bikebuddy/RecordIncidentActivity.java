@@ -1,11 +1,21 @@
 package edu.ramunc.vishnu.bikebuddy;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Date;
+
 public class RecordIncidentActivity extends AppCompatActivity {
+    double latitude;
+    double longitude;
+    Enum crash_severity;
+    String notes;
+    String time ;
+    Date date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +26,8 @@ public class RecordIncidentActivity extends AppCompatActivity {
         switch(v.getId()) {
             case R.id.submit:
                 Toast.makeText(getApplicationContext(), "Incident successfully reported!", Toast.LENGTH_SHORT).show();
+                IncidentTask mAuthTask = new IncidentRecordTask(this, latitude, longitude, crash_severity, notes, time, date);
+                mAuthTask.execute((Void) null);
                 break;
             case R.id.near_miss:
                 Toast.makeText(getApplicationContext(), "Near miss selected.", Toast.LENGTH_SHORT).show();
@@ -30,9 +42,10 @@ public class RecordIncidentActivity extends AppCompatActivity {
 
     }
 
-        public void sentIncident(View view){
+    public void sentIncident(View view){
         //IncidentTask mAuthTask = new IncidentRecordTask(this, latitude, longitude, ambulance, biker_age, bike_direction, biker_injury, bike_position, biker_race, biker_sex, city, county, day, location_of_crash, month, time);
         //mAuthTask.execute((Void) null);
+
     }
 
 
