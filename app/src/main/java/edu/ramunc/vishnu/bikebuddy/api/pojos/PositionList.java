@@ -13,6 +13,7 @@ public class PositionList extends ApiResponse {
     @SerializedName("positions")
     @Expose
     List<Position> positions;
+    Position x;
 
     public PositionList(int code, String message, List<Position> positions) {
         super(code, message);
@@ -30,4 +31,8 @@ public class PositionList extends ApiResponse {
     public void setPositions(List<Position> positions) {
         this.positions = positions;
     }
+
+    public int size() {return 0;}
+
+    public Position get(int i) {return x;}
 }

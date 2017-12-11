@@ -17,12 +17,12 @@ import java.util.Date;
 class IncidentRecordTask extends IncidentTask {
     protected final double latitude;
     protected final double longitude;
-    protected final Enum crash_severity;
+    protected final String crash_severity;
     protected final String notes;
     protected final String time;
     protected final Date date;
 
-    public IncidentRecordTask(Context c, double latitude, double longitude, Enum crash_severity, String notes, String time, Date date) {
+    public IncidentRecordTask(Context c, double latitude, double longitude, String crash_severity, String notes, String time, Date date) {
         super(c);
         this.latitude = latitude;
         this.longitude = longitude;

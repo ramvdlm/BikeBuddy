@@ -28,6 +28,6 @@ public interface ApiFunctions {
     @POST("recordIncident.php")
     @FormUrlEncoded
     Call<Incident> recordIncident(@Field("latitude") double latitude, @Field("longitude") double longitude,
-                                  @Field("crash_severity") Enum crash_severity, @Field("notes") String notes,
+                                  @Field("crash_severity") String crash_severity, @Field("notes") String notes,
                                   @Field("time") String time, @Field("date") Date date);
 }

@@ -36,14 +36,18 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.*;
 
 import edu.ramunc.vishnu.bikebuddy.api.ApiFunctions;
 import edu.ramunc.vishnu.bikebuddy.api.pojos.Incident;
+import edu.ramunc.vishnu.bikebuddy.api.pojos.Position;
+import edu.ramunc.vishnu.bikebuddy.api.pojos.PositionList;
 
 import static edu.ramunc.vishnu.bikebuddy.R.id.map;
+import static java.lang.System.in;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -61,6 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Sensor light;
     long lastPrinted = 0;
     int count = 0;
+    PositionList positions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +186,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //move map camera
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
+        //onCameraIdle();
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -294,6 +300,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
                 r.play();
             }
+        }
+    }
+
+    public void onCameraIdle() {
+        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+        double topLat = bounds.northeast.latitude;
+        double botLat = bounds.southwest.latitude;
+        double leftLong = bounds.southwest.longitude;
+        double rightLong = bounds.northeast.longitude;
+
+        AccidentPositionsTask mAuthTask = new AccidentPositionsTask(this, topLat, botLat, leftLong, rightLong);
+        mAuthTask.execute((Void) null);
+
+        for (int i = 0; i < positions.size(); i++) {
+            Position p = positions.get(i);
+            LatLng latLng = new LatLng(p.getLatitude(), p.getLongitude());
+            mMap.addMarker(new MarkerOptions().position(latLng));
         }
     }
 
